@@ -1,0 +1,102 @@
+CREATE DATABASE IF NOT EXISTS codersql;
+USE codersql;
+
+CREATE TABLE turnos (
+   id_turno INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   id_doctor INT NOT NULL,
+   id_paciente INT NOT NULL,
+   estado ENUM('confirmado', 'ausente', 'atendido') DEFAULT "confirmado",
+   fecha DATE NOT NULL,
+   hora TIME NOT NULL,
+   fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   CONSTRAINT unq_turno_unico UNIQUE (id_doctor, fecha, hora)
+   );
+   
+   CREATE TABLE doctores (
+   id_doctor INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   dni INT (8) UNIQUE NOT NULL,
+   nombre VARCHAR (30) NOT NULL,
+   apellido VARCHAR (30) NOT NULL,
+   fecha_de_nacimiento DATE,
+   telefono INT (12) UNIQUE NOT NULL,
+   email VARCHAR (50) UNIQUE DEFAULT NULL,
+   direccion VARCHAR (100),
+   id_establecimiento INT,
+   id_especialidad INT,
+   fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   );
+   
+  CREATE TABLE especialidades (
+   id_especialidad INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   especialidad VARCHAR (40) UNIQUE NOT NULL,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   
+   ); 
+   
+   CREATE TABLE pacientes (
+   id_paciente INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   dni INT (8) UNIQUE NOT NULL,
+   nombre VARCHAR (30) NOT NULL,
+   apellido VARCHAR (30) NOT NULL,
+   fecha_de_nacimiento DATE,
+   telefono INT (12) UNIQUE NOT NULL,
+   email VARCHAR (50) UNIQUE DEFAULT NULL,
+   direccion VARCHAR (100),
+   id_obra_social INT,
+   fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   
+   ); 
+   
+   CREATE TABLE establecimientos (
+   id_establecimiento INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   direccion VARCHAR (100),
+   telefono INT (12) UNIQUE NOT NULL,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   );
+   
+   CREATE TABLE obras_sociales (
+   id_obra_social INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   obra_social VARCHAR (100),
+   telefono INT (12) UNIQUE NOT NULL,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   );
+   
+    CREATE TABLE diagnosticos (
+   id_diagnostico INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+   diagnostico VARCHAR (1000) NOT NULL,
+   id_turno INT,
+   tratamiento VARCHAR (1000) NOT NULL,
+   receta VARCHAR (100),
+   fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   );
+   
+   CREATE TABLE doctores_obras_sociales (
+   id_doctor INT,
+   id_obra_social INT,
+   fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (id_doctor, id_obra_social),
+   FOREIGN KEY (id_doctor) REFERENCES doctores(id_doctor), 
+   FOREIGN KEY (id_obra_social) REFERENCES obras_sociales(id_obra_social)
+   );
+   
+ALTER TABLE turnos  
+ADD CONSTRAINT fk_turnos_doctor
+FOREIGN KEY (id_doctor) REFERENCES doctores(id_doctor), 
+ADD CONSTRAINT fk_turnos_paciente
+FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente);
+
+ALTER TABLE doctores  
+ADD CONSTRAINT fk_doctores_especialidad
+FOREIGN KEY (id_especialidad) REFERENCES especialidades(id_especialidad),
+ADD CONSTRAINT fk_doctores_establecimiento
+FOREIGN KEY (id_establecimiento) REFERENCES establecimientos(id_establecimiento);
+
+ALTER TABLE pacientes  
+ADD CONSTRAINT fk_pacientes_obra_social
+FOREIGN KEY (id_obra_social) REFERENCES obras_sociales(id_obra_social);
+
+ALTER TABLE diagnosticos  
+ADD CONSTRAINT fk_diagnosticos_turnos
+FOREIGN KEY (id_turno) REFERENCES turnos(id_turno);
