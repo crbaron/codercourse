@@ -22,8 +22,8 @@ CREATE TABLE turnos (
    telefono INT (12) UNIQUE NOT NULL,
    email VARCHAR (50) UNIQUE DEFAULT NULL,
    direccion VARCHAR (100),
-   id_establecimiento INT,
-   id_especialidad INT,
+   id_establecimiento INT NOT NULL,
+   id_especialidad INT NOT NULL,
    fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
    fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
    );
@@ -43,7 +43,7 @@ CREATE TABLE turnos (
    telefono INT (12) UNIQUE NOT NULL,
    email VARCHAR (50) UNIQUE DEFAULT NULL,
    direccion VARCHAR (100),
-   id_obra_social INT,
+   id_obra_social INT NOT NULL,
    fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
    fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   
    ); 
@@ -65,7 +65,7 @@ CREATE TABLE turnos (
     CREATE TABLE diagnosticos (
    id_diagnostico INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
    diagnostico VARCHAR (1000) NOT NULL,
-   id_turno INT,
+   id_turno INT NOT NULL,
    tratamiento VARCHAR (1000) NOT NULL,
    receta VARCHAR (100),
    fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -73,8 +73,8 @@ CREATE TABLE turnos (
    );
    
    CREATE TABLE doctores_obras_sociales (
-   id_doctor INT,
-   id_obra_social INT,
+   id_doctor INT NOT NULL,
+   id_obra_social INT NOT NULL,
    fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (id_doctor, id_obra_social),
    FOREIGN KEY (id_doctor) REFERENCES doctores(id_doctor), 
