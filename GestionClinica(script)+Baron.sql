@@ -64,9 +64,9 @@ CREATE TABLE turnos (
    
     CREATE TABLE diagnosticos (
    id_diagnostico INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-   diagnostico VARCHAR (1000) NOT NULL,
+   diagnostico TEXT NOT NULL,
    id_turno INT NOT NULL,
-   tratamiento VARCHAR (1000) NOT NULL,
+   tratamiento TEXT NOT NULL,
    receta VARCHAR (100),
    fecha_creada DATETIME DEFAULT CURRENT_TIMESTAMP,
    fecha_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
